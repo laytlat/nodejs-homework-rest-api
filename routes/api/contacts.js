@@ -70,7 +70,6 @@ router.delete("/:contactId", async (req, res, next) => {
 });
 
 router.put("/:contactId", async (req, res, next) => {
-  console.log(req.body);
   try {
     const { error } = updateSchema.validate(req.body);
     if (error) {
