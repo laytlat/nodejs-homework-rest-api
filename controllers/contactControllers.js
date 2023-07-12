@@ -1,5 +1,4 @@
 const contacts = require("../models/contacts");
-const { addSchema, updateSchema } = require("../validations");
 const { HttpError } = require("../utils");
 const { ctrlWrapper } = require("../utils");
 
@@ -18,10 +17,6 @@ const getById = async (req, res, next) => {
 };
 
 const addNewContact = async (req, res, next) => {
-  const { error } = addSchema.validate(req.body);
-  if (error) {
-    throw HttpError(400, error.message);
-  }
   const result = await contacts.addContact(req.body);
   res.status(201).json(result);
 };
@@ -39,11 +34,6 @@ const updateContact = async (req, res, next) => {
   if (!Object.keys(req.body).length) {
     throw HttpError(400, "Missing fields");
   }
-  const { error } = updateSchema.validate(req.body);
-  if (error) {
-    throw HttpError(400, error.message);
-  }
-
   const { contactId } = req.params;
   const result = await contacts.updateContact(contactId, req.body);
   if (!result) {
