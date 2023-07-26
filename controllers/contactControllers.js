@@ -1,9 +1,16 @@
-const { HttpError } = require("../utils");
 const Contact = require("../models/contact");
-const { ctrlWrapper } = require("../utils");
+const { ctrlWrapper, HttpError } = require("../utils");
 
 const getAll = async (req, res, next) => {
-  const result = await Contact.find();
+  const { _id: owner } = req.user;
+  const { page = 1, limit = 10, favorite } = req.query;
+  const skip = (page - 1) * limit;
+  const contactsRequest = !favorite ? { owner } : { owner, favorite };
+
+  const result = await Contact.find(contactsRequest, "", {
+    skip,
+    limit,
+  }).populate("owner", "email subscription");
   res.json(result);
 };
 
@@ -11,13 +18,14 @@ const getById = async (req, res, next) => {
   const { contactId } = req.params;
   const result = await Contact.findById(contactId);
   if (!result) {
-    throw HttpError(404, "Not found");
+    throw HttpError(404);
   }
   res.json(result);
 };
 
 const addNewContact = async (req, res, next) => {
-  const result = await Contact.create(req.body);
+  const { _id: owner } = req.user;
+  const result = await Contact.create({ ...req.body, owner });
   res.status(201).json(result);
 };
 
@@ -25,7 +33,7 @@ const deleteContact = async (req, res, next) => {
   const { contactId } = req.params;
   const contactToDelete = await Contact.findByIdAndRemove(contactId);
   if (!contactToDelete) {
-    throw HttpError(404, "Not found");
+    throw HttpError(404);
   }
   res.json({ message: "contact deleted" });
 };
@@ -36,7 +44,7 @@ const updateContact = async (req, res, next) => {
     new: true,
   });
   if (!result) {
-    throw HttpError(404, "Not found");
+    throw HttpError(404);
   }
   res.json(result);
 };
@@ -47,7 +55,7 @@ const updateStatusContact = async (req, res, next) => {
     new: true,
   });
   if (!result) {
-    throw HttpError(404, "Not found");
+    throw HttpError(404);
   }
   res.json(result);
 };
