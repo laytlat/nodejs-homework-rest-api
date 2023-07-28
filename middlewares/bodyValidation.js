@@ -1,6 +1,6 @@
 const { HttpError } = require("../utils");
 
-const contactsValidation = (schema) => {
+const bodyValidation = (schema) => {
   return (req, res, next) => {
     if (!Object.keys(req.body).length) {
       return next(HttpError(400, "Missing fields"));
@@ -15,7 +15,7 @@ const contactsValidation = (schema) => {
   };
 };
 
-const contactsValidationForFavirute = (schema) => {
+const bodyValidationForFavorite = (schema) => {
   return (req, res, next) => {
     if (!Object.keys(req.body).length) {
       return next(HttpError(400, "missing field favorite"));
@@ -30,4 +30,4 @@ const contactsValidationForFavirute = (schema) => {
   };
 };
 
-module.exports = { contactsValidation, contactsValidationForFavirute };
+module.exports = { bodyValidation, bodyValidationForFavorite };

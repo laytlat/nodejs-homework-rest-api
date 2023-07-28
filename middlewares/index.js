@@ -1,11 +1,13 @@
 const {
-  contactsValidation,
-  contactsValidationForFavirute,
-} = require("./contactsValidation");
+  bodyValidation,
+  bodyValidationForFavorite,
+} = require("./bodyValidation");
 const isValidId = require("./isValidId");
+const authenticate = require("./authenticate");
 
 module.exports = {
-  contactsValidation,
+  bodyValidation,
   isValidId,
-  contactsValidationForFavirute,
+  bodyValidationForFavorite,
+  authenticate,
 };
