@@ -102,7 +102,7 @@ const login = async (req, res) => {
   }
 
   if (!user.verify) {
-    HttpError(401, "Please verify your email");
+    throw HttpError(401, "Please verify your email");
   }
 
   const passwordCompare = await bcrypt.compare(password, user.password);
